@@ -1,0 +1,42 @@
+// Ambil JSON dari tag <script id="data-json">
+const jsonText = document.getElementById('data-json').textContent;
+const data = JSON.parse(jsonText);
+
+// TAMPILIN HEADER TOKO
+document.getElementById('link-toko').href = data.link_toko;
+document.getElementById('gambar-toko').src = data.gambar_toko;
+document.getElementById('nama-toko').innerText = data.nama_toko;
+document.getElementById('rating').innerText = data.rating;
+
+// TAMPILIN PRODUK
+let produkHTML = '';
+data.produk.forEach(p => {
+  produkHTML += `
+    <a href="${p.link}" target="_blank" class="produk-card">
+      <img src="${p.gambar}" alt="${p.nama}">
+      <div class="produk-info">
+        <h3>${p.nama}</h3>
+        <p class="harga">${p.harga}</p>
+        <small>Terjual: ${p.terjual}</small>
+      </div>
+    </a>
+  `;
+});
+document.getElementById('produk-grid').innerHTML = produkHTML;
+
+// TAMPILIN KOMENTAR - INI YANG DIBENERIN
+let komentarHTML = '';
+data.komentar_terbaik.forEach(k => {
+  let fotoHTML = k.foto ? '<img src="${k.foto}">' : ''; // <-- pake backtick
+  let bintang = '⭐'.repeat(k.rating);
+  komentarHTML += `
+    <div class="komentar-card">
+      ${fotoHTML}
+      <div>
+        <b>${k.user}</b> ${bintang}
+        <p style="margin:5px 0 0 0">${k.komentar}</p>
+      </div>
+    </div>
+  `;
+});
+document.getElementById('komentar-list').innerHTML = komentarHTML;
